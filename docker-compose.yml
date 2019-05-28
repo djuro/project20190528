@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpasswd
+      MYSQL_DATABASE: newsapp_db
+      MYSQL_USER: devuser
+      MYSQL_PASSWORD: devpass
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  mydev-php:
+    build: .
+    ports:
+      - 8282:80
+    environment:
+      - VIRTUAL_HOST=newsapp.local
+    volumes:
+      - .:/var/www/html
