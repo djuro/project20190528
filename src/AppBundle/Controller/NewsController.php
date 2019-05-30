@@ -5,20 +5,35 @@ namespace AppBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Validator\Constraints\NotBlank;
+
 
 class NewsController extends Controller
 {
+    const CATEGORY_ERROR = "Please choose category.";
+
     /**
-     * @Route("/admin/categories", name="categories")
+     * @Route("/news/categories", name="categories")
      */
-    public function indexAction(Request $request)
+    public function categoriesAction(Request $request)
     {
-        // replace this example code with whatever you need
+        $form = $this->createFormBuilder()->add('category', ChoiceType::class, array(
+               'required' => TRUE, 'label' => 'Category:', 
+               'choices' => CategoryEnum::categories(),
+               'multiple' => FALSE, 'expanded' => FALSE,
+               'constraints' => array( new NotBlank() )))
+           ->getForm();
+
+
         return $this->render('@App/news/categories.html.twig', [
-            'var1' => 'var 1']
+            'form' => $form->createView() ]
         );
     }
 
+    private function formatCategoryChoices() {
+
+    }
     /**
      * @Route("/another", name="another")
      */
