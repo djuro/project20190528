@@ -1,0 +1,28 @@
+{% extends '@App/layout.html.twig' %}
+
+{% block body %}
+<h1>News List</h1>
+<p>&nbsp;</p>
+<form novalidate>
+    <div class="form-group">
+    <div class="row">
+        <div class="col-md-5">
+          {{ form_label(form.category) }}
+          {{ form_widget(form.category, {'attr':{'class':'form-control'}}) }} 
+        </div>
+        <div class="col-md-1">
+            <img src="{{ asset('bundles/app/img/ajax-loading.gif') }}" id="loading_img" style="z-index:5;position:absolute;top:20%;left:40%;">
+        </div>
+    </div>
+    </div>
+</form>
+        
+<div class="row">&nbsp;</div>
+
+<div class="list-group" id="articles_list"></div>
+        
+{% block javascripts %}
+  {{ parent() }}
+  <script type="text/javascript" src="{{ asset('bundles/app/js/categoryNewsList.js') }}"></script>
+{% endblock javascripts %}
+{% endblock body %}

@@ -3,47 +3,41 @@
 namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
+use AppBundle\Service\RssFeedService;
 
 class NewsController extends Controller
 {
     const CATEGORY_ERROR = "Please choose category.";
 
     /**
-     * @Route("/news/categories", name="categories")
+     * @Route("/news/rss-feed-list", name="rss_feed_list")
      */
-    public function categoriesAction(Request $request)
+    public function rssFeedListAction()
     {
         $form = $this->createFormBuilder()->add('category', ChoiceType::class, array(
-               'required' => TRUE, 'label' => 'Category:', 
-               'choices' => CategoryEnum::categories(),
-               'multiple' => FALSE, 'expanded' => FALSE,
-               'constraints' => array( new NotBlank() )))
-           ->getForm();
+            'required' => TRUE, 'label' => 'Choose Category:', 
+            'choices' => CategoryEnum::categories(),
+            'multiple' => FALSE, 'expanded' => FALSE,
+            'constraints' => array( new NotBlank() )))
+          ->getForm();
 
 
-        return $this->render('@App/news/categories.html.twig', [
+        return $this->render('@App/news/list.html.twig', [
             'form' => $form->createView() ]
         );
     }
 
-    private function formatCategoryChoices() {
-
-    }
     /**
-     * @Route("/another", name="another")
+     * @Route("/", name="welcome")
      */
-    public function anotherAction(Request $request)
-    {
-        
-        return $this->render('@App/default/another.html.twig',
-                array(
-                    'var1'=>'Var 1'
-                ));
-
+    public function welcomeAction() {
+        return $this->redirect($this->generateUrl('rss_feed_list'));
     }
+    
+    
+    
 }
